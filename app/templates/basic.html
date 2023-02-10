@@ -3,13 +3,19 @@
 <head>
 	<meta http-equiv="Content-Type"
 		content="width=device-width" charset="utf-8">	
-	<link rel="stylesheet" type="text/css" href="static/style.css">	
+	<link rel="stylesheet" type="text/css" href="style.css">	
 	<title>Python Practice</title>
 </head>
 <body>
+	<header>
+		Python Practice Task
+	</header>
 	<div class="nav">
 		<a href="find"  class="link">Поиск записей</a>
-		<a href=""  class="link">Удалить запись</a>
+		<a href="delete"  class="link">Удалить запись</a><br>
   	</div>
+  	{% for post in posts %}
+  		{{post.all}}
+  	{% endfor %}
 </body>
 </html>

@@ -1,19 +1,25 @@
-from flask import Flask,render_template
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from sqlalchemy import create_engine
+from models import Post
+from sqlalchemy.orm import sessionmaker
 
 
-app=Flask(__name__)
+app=FastAPI()
+SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:1111@localhost:5432/practice'
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autoflush=False, bind=engine)
+db = SessionLocal()
 
-@app.route('/')
+@app.get('/')
 def index():
-	return render_template('basic.html')
+	posts = db.query(Post).all()
+	return posts
 
-@app.route('/find')
+@app.get('/find')
 def find():
-	return render_template('find.html')
+	return FileResponse("templates/find.html")
 
-@app.route('/delete')
+@app.get('/delete')
 def delete():
-	return render_template('basic.html')
-
-if __name__=='__main__':
-	app.run(debug=True)
+	return FileResponse("templates/delete.html")
