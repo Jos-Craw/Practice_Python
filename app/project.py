@@ -1,20 +1,27 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from sqlalchemy import create_engine
-from models import Post
-from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, HTMLResponse
+import models
+from db import db
+import uvicorn
+from fastapi.templating import Jinja2Templates
 
 
 app=FastAPI()
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:1111@localhost:5432/practice'
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autoflush=False, bind=engine)
-db = SessionLocal()
+templates = Jinja2Templates(directory="templates")
 
-@app.get('/')
-def index():
-	posts = db.query(Post).all()
-	return posts
+
+def connect_db():
+	try:
+		yield db
+	finally:
+		db.close()
+
+
+
+@app.get('/',response_class=HTMLResponse)
+def index(request:Request):
+	posts = db.query(models.Post.id,models.Post.text,models.Post.created_date).filter(models.Post.id<10).order_by(models.Post.created_date)
+	return templates.TemplateResponse("basic.html",{'request':request,'posts':posts})
 
 @app.get('/find')
 def find():
@@ -23,3 +30,6 @@ def find():
 @app.get('/delete')
 def delete():
 	return FileResponse("templates/delete.html")
+
+if __name__=='__main__':
+	uvicorn.run()
