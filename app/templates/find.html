@@ -13,7 +13,15 @@
 	<h1 class="nav">
 		НАЙДИ
 		<a href="/"  class="link">Домой</a>
-		<p><input type="text" size="40"><br><button>Найти</button></p>
+		<form action="findpost" method="post">
+			<p>
+				<input name='ids'><br>
+				<input type="submit" value="Найти" />
+			</p>
+		</form>
   	</h1>
+  	{% for post in posts %}
+  		{{post}}<br>
+  	{% endfor %}
 </body>
 </html>

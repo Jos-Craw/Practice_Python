@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import FileResponse, HTMLResponse
-import models
+from models import Post
 from db import db
 import uvicorn
 from fastapi.templating import Jinja2Templates
@@ -20,16 +20,29 @@ def connect_db():
 
 @app.get('/',response_class=HTMLResponse)
 def index(request:Request):
-	posts = db.query(models.Post.id,models.Post.text,models.Post.created_date).filter(models.Post.id<10).order_by(models.Post.created_date)
+	posts = db.query(Post.id,Post.text,Post.created_date).order_by(Post.created_date)
 	return templates.TemplateResponse("basic.html",{'request':request,'posts':posts})
 
-@app.get('/find')
-def find():
-	return FileResponse("templates/find.html")
+@app.get('/find',response_class=HTMLResponse)
+def find(request:Request):
+	return templates.TemplateResponse("find.html",{'request':request})
 
-@app.get('/delete')
-def delete():
-	return FileResponse("templates/delete.html")
+@app.post('/findpost',response_class=HTMLResponse)
+def findpost(request:Request,ids=Form()):
+	posts = db.query(Post.id,Post.text,Post.created_date).filter(Post.id==ids).order_by(Post.created_date)
+	return templates.TemplateResponse("find.html",{'request':request,'posts':posts})
+
+@app.get('/delete',response_class=HTMLResponse)
+def delete(request:Request):
+	return templates.TemplateResponse("delete.html",{'request':request})
+
+@app.post('/deletepost',response_class=HTMLResponse)
+def deletepost(request:Request,ids=Form()):
+	posts = db.query(Post).filter(Post.id==ids).first()
+	print(posts)
+	db.delete(posts)
+	db.commit()
+	return templates.TemplateResponse("delete.html",{'request':request})
 
 if __name__=='__main__':
 	uvicorn.run()
