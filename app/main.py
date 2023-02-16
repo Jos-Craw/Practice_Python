@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import FileResponse, HTMLResponse
-from models import Post
-from db import db
+from app.models import Post
+from app.db import db
 import uvicorn
 from fastapi.templating import Jinja2Templates
 
@@ -29,7 +29,7 @@ def find(request:Request):
 
 @app.post('/findpost',response_class=HTMLResponse)
 def findpost(request:Request,ids=Form()):
-	posts = db.query(Post.id,Post.text,Post.created_date).filter(Post.id==ids).order_by(Post.created_date)
+	posts = db.query(Post.id,Post.text,Post.created_date).filter(Post.id==ids).all()
 	return templates.TemplateResponse("find.html",{'request':request,'posts':posts})
 
 @app.get('/delete',response_class=HTMLResponse)
@@ -39,8 +39,8 @@ def delete(request:Request):
 @app.post('/deletepost',response_class=HTMLResponse)
 def deletepost(request:Request,ids=Form()):
 	posts = db.query(Post).filter(Post.id==ids).first()
-	print(posts)
-	db.delete(posts)
+	if posts != None:
+		db.delete(posts)
 	db.commit()
 	return templates.TemplateResponse("delete.html",{'request':request})
 

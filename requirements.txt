@@ -1,0 +1,8 @@
+sqlalchemy
+sqlalchemy.orm
+fastapi
+fastapi.responses
+uvicorn
+psycopg2
+Jinja2
+python-multipart

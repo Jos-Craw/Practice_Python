@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1111
+      - POSTGRES_DB=postgres
+    networks:
+      - practice
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:1111@db:5432/practice
+    depends_on:
+      - db
+    networks:
+      - practice
+networks:
+  practice:
