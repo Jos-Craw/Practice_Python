@@ -11,5 +11,3 @@ COPY ./app /app
 COPY templates /app
 
 CMD ["python", "post.py"]
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--reload"]

@@ -1,26 +1,26 @@
 version: "3"
 services:
-  db:
+  postgres:
     image: postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1111
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     networks:
-      - practice
+      - mnetwork
   web:
     build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --reload
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:1111@db:5432/practice
     depends_on:
-      - db
+      - postgres
     networks:
-      - practice
+      - mnetwork
 networks:
-  practice:
+  mnetwork:
+    driver: bridge
