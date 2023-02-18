@@ -43,6 +43,3 @@ def deletepost(request:Request,ids=Form()):
 		db.delete(posts)
 	db.commit()
 	return templates.TemplateResponse("delete.html",{'request':request})
-
-if __name__=='__main__':
-	uvicorn.run()

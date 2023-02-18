@@ -9,5 +9,3 @@ RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 COPY ./app /app
 
 COPY templates /app
-
-CMD ["python", "post.py"]
