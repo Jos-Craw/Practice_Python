@@ -6,3 +6,6 @@ uvicorn
 psycopg2
 Jinja2
 python-multipart
+aiohttp
+elasticsearch
+pgsync
