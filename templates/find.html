@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type"
+		content="width=device-width" charset="utf-8">	
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>Python Practice</title>	
+</head>
+<body>
+	<h1>
+		Python Practice Task
+	</h1>
+	<h1 class="nav">
+		НАЙДИ
+		<a href="/"  class="link">Домой</a>
+		<form action="findpost" method="post">
+			<p>
+				<input name='ids'><br>
+				<input type="submit" value="Найти" />
+			</p>
+		</form>
+  	</h1>
+  	{% for post in posts %}
+  		{{post}}<br>
+  	{% endfor %}
+</body>
+</html>
