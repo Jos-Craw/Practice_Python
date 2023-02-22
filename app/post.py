@@ -4,7 +4,7 @@ import csv
 
 
 mydb = psycopg2.connect(
-host="postgres",
+host="localhost",
 user="postgres",
 password="postgres",
 port="5432",
