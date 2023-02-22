@@ -1,7 +1,13 @@
-{
-    "table": "posts",
-    "columns": [
-        "id",
-        "text"
-    ]
-}
+[
+    {
+        "database": "practice",
+        "index": "test",
+        "nodes": {
+            "table": "posts",
+            "columns": [
+                "id",
+                "text"
+            ]
+        }
+    }
+]

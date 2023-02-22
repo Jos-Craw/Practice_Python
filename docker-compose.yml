@@ -10,6 +10,10 @@ services:
       - POSTGRES_DB=practice
     networks:
       - mnetwork
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
 
   web:
     build: .
@@ -38,7 +42,7 @@ services:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:8.2.3
     environment:
-      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+      - ELASTICSEARCH_HOST=http://elasticsearch:9200
     networks:
       - mnetwork
     depends_on:
@@ -58,16 +62,28 @@ services:
 
   pgsync:
     build: .
-    command: pgsync --config /app/schema.json --daemon
+    command:
+      - bash
+      - -c
+      - |
+        while !</dev/tcp/elasticsearch/9200; do sleep 1; done; \
+        bootstrap
+        pgsync  --config /app/schema.json --daemon > /dev/null
     environment: 
       - PG_USER=postgres
       - PG_HOST=postgres
       - PG_PORT=5432
       - PG_PASSWORD=postgres
-      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_HOST=localhost
       - ELASTICSEARCH_PORT=9200
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
     networks:
       - mnetwork
+    depends_on:
+      - elasticsearch
+      - postgres
 
 networks:
   mnetwork:
