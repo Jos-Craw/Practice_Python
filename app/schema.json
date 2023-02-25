@@ -1,9 +1,10 @@
 [
     {
         "database": "practice",
-        "index": "test",
+        "index": "practice",
         "nodes": {
             "table": "posts",
+            "schema": "public",
             "columns": [
                 "id",
                 "text"
@@ -11,3 +12,5 @@
         }
     }
 ]
+
+

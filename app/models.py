@@ -11,3 +11,4 @@ class Post(Base):
 	rubrics = Column(Text, nullable=False)
 	text = Column(Text, nullable=False)
 	created_date = Column(Date, nullable=False)
+	

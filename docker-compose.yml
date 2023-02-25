@@ -5,15 +5,12 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=practice
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - mnetwork
-    command:
-      - postgres
-      - -c
-      - wal_level=logical
+    command: postgres -c wal_level=logical
 
   web:
     build: .
@@ -62,23 +59,18 @@ services:
 
   pgsync:
     build: .
-    command:
-      - bash
-      - -c
-      - |
-        while !</dev/tcp/elasticsearch/9200; do sleep 1; done; \
-        bootstrap
-        pgsync  --config /app/schema.json --daemon > /dev/null
+    command: pgsync --config /app/schema.json --daemon
     environment: 
-      - PG_USER=postgres
-      - PG_HOST=postgres
-      - PG_PORT=5432
-      - PG_PASSWORD=postgres
-      - ELASTICSEARCH_HOST=localhost
-      - ELASTICSEARCH_PORT=9200
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_DB=0
+      - PG_USER=${PG_USER}
+      - PG_HOST=${PG_HOST}
+      - PG_PORT=${PG_PORT}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
+      - ELASTICSEARCH_PORT=${ELASTICSEARCH_PORT}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - ELASTICSEARCH=true
     networks:
       - mnetwork
     depends_on:
