@@ -6,6 +6,7 @@ import uvicorn
 from fastapi.templating import Jinja2Templates
 import elasticsearch
 from elasticsearch import Elasticsearch
+import os
 
 
 app=FastAPI()
@@ -20,7 +21,7 @@ def connect_db():
 
 
 def search(txt:str):
-	result=Elasticsearch('http://elasticsearch:9200').search(index='practice',body={
+	result=Elasticsearch(os.getenv("ELASTICSEARCH_HOST", None)).search(index='practice',body={
 		"size":20,
 		"query": {
 			"match":{
