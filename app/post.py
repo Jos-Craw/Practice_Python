@@ -2,8 +2,8 @@ import psycopg2
 import os
 import csv
 
-
-mydb = psycopg2.connect('postgresql://postgres:postgres@postgres:5432/practice')
+ 
+mydb = psycopg2.connect(os.getenv('POSTGRES_URL')) 
 cursor = mydb.cursor()
 
 cursor.execute("DROP TABLE IF EXISTS posts")

@@ -8,6 +8,8 @@ services:
     networks:
       - mnetwork
     command: postgres -c wal_level=logical
+    volumes:
+      - ./postgresdata:/app/
 
   web:
     build: .
@@ -20,6 +22,7 @@ services:
       - postgres
     networks:
       - mnetwork
+    env_file: ./.env
 
   elasticsearch:
     container_name: elasticsearch
@@ -31,6 +34,8 @@ services:
       - mnetwork
     ports:
       - "9200:9200"
+    volumes:
+      - ./elasticdata:/app/
 
   kibana:
     container_name: kibana
@@ -55,7 +60,7 @@ services:
 
   pgsync:
     build: .
-    command: pgsync --config /app/schema.json --daemon
+    command: pgsync --daemon
     env_file: .env
     networks:
       - mnetwork

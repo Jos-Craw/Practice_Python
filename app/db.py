@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
 
 SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:postgres@postgres:5432/practice'

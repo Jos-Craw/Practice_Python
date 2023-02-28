@@ -21,7 +21,7 @@ def connect_db():
 
 
 def search(txt:str):
-	result=Elasticsearch(os.getenv("ELASTICSEARCH_HOST", None)).search(index='practice',body={
+	result=Elasticsearch(os.getenv("ELASTIC")).search(index='practice',body={
 		"size":20,
 		"query": {
 			"match":{
