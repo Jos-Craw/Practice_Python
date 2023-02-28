@@ -9,11 +9,15 @@ services:
       - mnetwork
     command: postgres -c wal_level=logical
     volumes:
-      - ./postgresdata:/app/
+      - "./postgresdata:/var/lib/postgresql/data"
 
   web:
     build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --reload
+    command: 
+      - bash
+      - -c
+      - |
+        while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --reload
     volumes:
       - .:/app
     ports:
@@ -60,7 +64,13 @@ services:
 
   pgsync:
     build: .
-    command: pgsync --daemon
+    command:
+      - bash
+      - -c
+      - |
+        while !</dev/tcp/elasticsearch/9200; do sleep 1; done; \
+        bootstrap
+        pgsync --daemon > /dev/null
     env_file: .env
     networks:
       - mnetwork
@@ -71,3 +81,7 @@ services:
 networks:
   mnetwork:
     driver: bridge
+
+volumes:
+  postgresdata:
+    external: true
