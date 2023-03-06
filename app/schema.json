@@ -1,0 +1,16 @@
+[
+    {
+        "database": "practice",
+        "index": "practice",
+        "nodes": {
+            "table": "posts",
+            "schema": "public",
+            "columns": [
+                "id",
+                "text"
+            ]
+        }
+    }
+]
+
+

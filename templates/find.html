@@ -2,8 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type"
-		content="width=device-width" charset="utf-8">	
-	<link rel="stylesheet" type="text/css" href="style.css">
+		content="width=device-width" charset="utf-8">
 	<title>Python Practice</title>	
 </head>
 <body>
@@ -21,7 +20,11 @@
 		</form>
   	</h1>
   	{% for post in posts %}
-  		{{post}}<br>
+  		{{post.id}}<br>
+  		{{post.rubrics}}<br>
+  		{{post.text}}<br>
+  		{{post.created_date}}<br>
+  		<br>
   	{% endfor %}
 </body>
 </html>

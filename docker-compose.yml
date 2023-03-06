@@ -4,16 +4,20 @@ services:
     image: postgres
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=practice
+    env_file: .env
     networks:
       - mnetwork
+    command: postgres -c wal_level=logical
+    volumes:
+      - "./postgresdata:/var/lib/postgresql/data"
 
   web:
     build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --reload
+    command: 
+      - bash
+      - -c
+      - |
+        while !</dev/tcp/postgres/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --reload
     volumes:
       - .:/app
     ports:
@@ -22,6 +26,7 @@ services:
       - postgres
     networks:
       - mnetwork
+    env_file: ./.env
 
   elasticsearch:
     container_name: elasticsearch
@@ -33,12 +38,13 @@ services:
       - mnetwork
     ports:
       - "9200:9200"
+    volumes:
+      - ./elasticdata:/app/
 
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:8.2.3
-    environment:
-      - ELASTICSEARCH_HOSTS=http://es-container:9200
+    env_file: .env
     networks:
       - mnetwork
     depends_on:
@@ -47,13 +53,35 @@ services:
       - "5601:5601"
 
   redis:
-    image: 'redis:alpine'
+    image: redis:alpine
     container_name: redis
     ports:
       - '6379:6379'
+    depends_on:
+      - pgsync
     networks:
       - mnetwork
+
+  pgsync:
+    build: .
+    command:
+      - bash
+      - -c
+      - |
+        while !</dev/tcp/elasticsearch/9200; do sleep 1; done; \
+        bootstrap
+        pgsync --daemon > /dev/null
+    env_file: .env
+    networks:
+      - mnetwork
+    depends_on:
+      - elasticsearch
+      - postgres
 
 networks:
   mnetwork:
     driver: bridge
+
+volumes:
+  postgresdata:
+    driver: local

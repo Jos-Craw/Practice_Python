@@ -3,12 +3,8 @@ import os
 import csv
 
 
-mydb = psycopg2.connect(
-host="postgres",
-user="postgres",
-password="postgres",
-port="5432",
-database="practice")
+mydb = psycopg2.connect(host="localhost",user="postgres",password="postgres",port="5432",database="practice")
+
 cursor = mydb.cursor()
 
 cursor.execute("DROP TABLE IF EXISTS posts")
@@ -22,3 +18,5 @@ with open("posts.csv", 'r',encoding="utf8") as file:
 
 mydb.commit()
 mydb.close()
+
+print(os.environ.get('POSTGRES_URL'))

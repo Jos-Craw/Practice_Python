@@ -1,9 +1,0 @@
-{
-    "table": "posts",
-    "columns": [
-        "id",
-        "rubrics",
-        "text",
-        "created_date"
-    ],
-}
