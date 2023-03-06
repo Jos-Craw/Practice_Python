@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base  = declarative_base()
 
-
+#Создание модели
 class Post(Base):
 	__tablename__ = "posts"
 	id = Column(Integer, primary_key=True)

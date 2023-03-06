@@ -84,4 +84,4 @@ networks:
 
 volumes:
   postgresdata:
-    external: true
+    driver: local
